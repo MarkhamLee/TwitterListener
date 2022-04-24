@@ -74,17 +74,30 @@ class Filter(tweepy.Stream):
         #if profanity.contains_profanity(tweet_text):
          #   return     
        
-        # calculate sentiment - based on raw tweets
-        # may potentially remove certain characters in subsequent analysis 
+        # text blob analysis - text blob generates two types of scores
+        # Polarity a score between -1 and 1, where -1 is negative sentiment and +1 is positive 
+        # subjectivity, which lies beteen 0 and 1 
         blob = TextBlob(tweet_text)
         tweet_sentiment = blob.sentiment
         polarity = tweet_sentiment.polarity
         subjectivity = tweet_sentiment.subjectivity 
 
-        # sentiment intensity tallying positive vs. neutral vs. negative 
-        # in order to make this more efficient I generate the score for later use in determining 
-        # if a tweet was positive vs. neutral vs. negative 
+        # Vader sentiment analysis, which returns three probabilities for a given sentence being 
+        # positive, negative or neutral, with all the probabilities adding up to 1 
+        # E.g., a sentence scores 0.24 for negative, 0.7 for positive and 0.06 for neutral 
+        # a compound score is also generated that is the overall score the sentence 
+        # Vader is optimized for social media, so it "should" give better sentiment scores for 
+        # Twitter 
+
+        # generate each of the sentiment scores 
+        # score is a dictionary with the following keys: 
         score = SentimentIntensityAnalyzer().polarity_scores(tweet_text)
+
+        positive = score['pos']
+        negative = score['neg']
+        neutral = score['neu']
+        compound = score['compound']
+
 
         # for more accurate analytics but displaying tweets in public
         # censors profanity in the original tweet, but only after sentiment has been calculated 
@@ -94,10 +107,11 @@ class Filter(tweepy.Stream):
         # if you don't have the DB or table created, it will be created
         # for you automatically
         # insert your own names for the db and the table 
-        db = dataset.connect("sqlite:///filterTweets.db")
+        db = dataset.connect("sqlite:///filtertweetsdb.db")
 
         table = db['filter_tweet_table']
         table.insert(dict(
+            keyword = keyword,
             text=tweet_text,
             timeStamp = status.created_at,
             verified_user=status.user.verified,
@@ -105,9 +119,12 @@ class Filter(tweepy.Stream):
             retweetCount = status.retweet_count,
             favoriteCount = status.favorite_count,
             location = location,
-            sentiment = polarity,
-            subjectivity = subjectivity,
-            score = score,))
+            textblob_sentiment = polarity,
+            textblob_subjectivity = subjectivity,
+            vader_compound = compound,
+            vader_positive = positive,
+            vader_negative = negative,
+            vader_neutral = neutral,))
         
         #print tweet just to observe things working 
         #print(tweet_text)

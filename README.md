@@ -21,6 +21,13 @@ The repo's contents are as follows:
 * A real time dashboard showing items like tweet volume and sentiment by keyword. My plan is to build dashboards with both Django and Streamlit, the former because that is what I'm more likely to encounter at work and the latter because it looks like a really elegant way to quickly stand up dashboards so it's a technology worth learning. 
 * Better handling of connection issues, namely: I'd like the solution to pause when it receives a 420 or other error code and just wait for 5-10 minutes and then try to reconnect. 
 
+### Updates: 
+* 4/23/2022: small tweaks for usability and readability:
+    * Added SQL queries for the sample DB instead of just having it
+    for the filtered one
+    * Added more details on the difference between the textblob and VADER sentiment analysis 
+    * Split out each of the VADER sentiment analysis components instead of inserting the entire dictionary into a field 
+
 
 #### Equipment used: 16" 2019 MacBook Pro, eight core Intel i9, 16GB 
 
