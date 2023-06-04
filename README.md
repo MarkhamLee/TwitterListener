@@ -1,5 +1,10 @@
 ## Real Time Twitter Streamer 
 
+
+## UPDATE - June 4, 2023 
+* Given [recent changes](https://developer.twitter.com/en) to Twitter's APIs free read access is no longer available, meaning you can only post a limited number of tweets per month and would need to upgrade to a paid tier in order to read incoming tweets. Additionally, there would likely need to be some tweaks required to connect to the new APIs as it stands to reason that they've made significant changes since I first created this repo about year or so ago. All that being said, I'm going to leave this repo up as it's still a good example of how to leverage Tweepy, in particular leveraging Tweepy in a solution where you have to override a lot of its methods to suit your needs. Meaning: no longer drag and drop into your solution or download and use immediately, but still usefull in the right circumstances. 
+
+
 ### Listener(s) for gathering tweets and performing natural language processing in real time. 
 
 I built the initial versions of this based on simple curiousity around performing natural language processing on tweets, and what started out as basic Twitter scraper that would grab a sampling of all tweets turned into something that could be used to track sentiment in real time, gather research data, etc. 
